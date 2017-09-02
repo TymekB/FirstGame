@@ -1,6 +1,7 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {preload: preload, create: create, update: update});
 var player;
 var platforms;
+var cursors;
 
 function preload()
 {
@@ -8,6 +9,8 @@ function preload()
     game.load.image('platform', 'assets/platform.png');
     game.load.image('sky', 'assets/sky.png');
     game.load.image('star', 'assets/star.png');
+
+    cursors = game.input.keyboard.createCursorKeys();
 }
 
 function create()
@@ -26,7 +29,7 @@ function create()
 
     var platform1, platform2;
     platform1 = platforms.create(500, 360, 'platform');
-    platform2 = platforms.create(-150, 200, 'platform');
+    platform2 = platforms.create(-150, 150, 'platform');
 
     platform1.body.immovable = true;
     platform2.body.immovable = true;
@@ -35,11 +38,28 @@ function create()
 
     game.physics.enable(player);
     player.body.gravity.y = 300;
+    player.body.collideWorldBounds = true;
 }
 
 function update()
 {
     game.physics.arcade.collide(player, platforms);
+
+    if(cursors.left.isDown)
+    {
+        player.body.velocity.x -= 5;
+    }
+
+    if(cursors.right.isDown)
+    {
+        player.body.velocity.x += 5;
+    }
+
+    if(cursors.up.isDown && player.body.touching.down)
+    {
+        player.body.velocity.y -= 370;
+        console.log("up");
+    }
 }
 
 
