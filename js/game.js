@@ -34,11 +34,15 @@ function create()
     platform1.body.immovable = true;
     platform2.body.immovable = true;
 
-    player = game.add.sprite(50, game.world.height-150, 'player');
+    player = game.add.sprite(50, game.world.height-200, 'player');
 
     game.physics.enable(player);
     player.body.gravity.y = 300;
     player.body.collideWorldBounds = true;
+
+
+    player.animations.add('left', [0,1,2,3], 10, true);
+    player.animations.add('right', [5,6,7,8], 10, true);
 }
 
 function update()
@@ -48,17 +52,23 @@ function update()
     if(cursors.left.isDown)
     {
         player.body.velocity.x -= 5;
+        player.animations.play('left');
     }
-
-    if(cursors.right.isDown)
+    else if(cursors.right.isDown)
     {
         player.body.velocity.x += 5;
+        player.animations.play('right');
     }
-
-    if(cursors.up.isDown && player.body.touching.down)
+    else if(cursors.up.isDown && player.body.touching.down)
     {
         player.body.velocity.y -= 370;
         console.log("up");
+    }
+    else
+    {
+        player.body.velocity.x = 0;
+        player.animations.stop();
+        player.frame = 4;
     }
 }
 
