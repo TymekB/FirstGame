@@ -2,6 +2,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {preload: preload, cre
 var player;
 var platforms;
 var cursors;
+var stars;
 
 function preload()
 {
@@ -34,6 +35,16 @@ function create()
     platform1.body.immovable = true;
     platform2.body.immovable = true;
 
+    stars = game.add.group();
+    stars.enableBody = true;
+
+    for(var i = 0; i <= 20; i++)
+    {
+        var star = stars.create(i * 50, 20, 'star');
+        star.body.gravity.y = 500;
+        star.body.bounce.y = 0.3;
+    }
+
     player = game.add.sprite(50, game.world.height-200, 'player');
 
     game.physics.enable(player);
@@ -48,6 +59,8 @@ function create()
 function update()
 {
     game.physics.arcade.collide(player, platforms);
+    game.physics.arcade.collide(stars, platforms);
+    game.physics.arcade.overlap(player, stars, collectStar);
 
     if(cursors.left.isDown)
     {
@@ -72,4 +85,7 @@ function update()
     }
 }
 
-
+function collectStar(player, star)
+{
+    star.kill();
+}
