@@ -5,6 +5,7 @@ var cursors;
 var stars;
 var text;
 var seconds = 0;
+var collectedStars = 0;
 
 function preload()
 {
@@ -96,6 +97,13 @@ function update()
 function collectStar(player, star)
 {
     star.kill();
+    collectedStars++;
+
+    if(collectedStars >= 16)
+    {
+        game.time.events.stop();
+        text.setText('Game over! Your time: ' + seconds + ' seconds');
+    }
 }
 
 function updateTimer()
