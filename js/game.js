@@ -3,6 +3,8 @@ var player;
 var platforms;
 var cursors;
 var stars;
+var text;
+var seconds = 0;
 
 function preload()
 {
@@ -38,7 +40,7 @@ function create()
     stars = game.add.group();
     stars.enableBody = true;
 
-    for(var i = 0; i <= 20; i++)
+    for(var i = 0; i <= 16; i++)
     {
         var star = stars.create(i * 50, 20, 'star');
         star.body.gravity.y = 500;
@@ -51,9 +53,11 @@ function create()
     player.body.gravity.y = 300;
     player.body.collideWorldBounds = true;
 
-
     player.animations.add('left', [0,1,2,3], 10, true);
     player.animations.add('right', [5,6,7,8], 10, true);
+
+    text = game.add.text(16,16, 'Time: 0 seconds', { fill: '#000', fontSize: '25px' });
+    game.time.events.loop(1000, updateTimer);
 }
 
 function update()
@@ -75,7 +79,11 @@ function update()
     else if(cursors.up.isDown && player.body.touching.down)
     {
         player.body.velocity.y -= 370;
-        console.log("up");
+    }
+    else if(cursors.down.isDown)
+    {
+        player.body.velocity.y += 40;
+
     }
     else
     {
@@ -88,4 +96,10 @@ function update()
 function collectStar(player, star)
 {
     star.kill();
+}
+
+function updateTimer()
+{
+    seconds++;
+    text.setText('Time: ' + seconds + " seconds");
 }
